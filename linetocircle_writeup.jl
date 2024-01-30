@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.32
+# v0.19.37
 
 using Markdown
 using InteractiveUtils
@@ -18,7 +18,7 @@ begin
 end
 
 # ╔═╡ 50be94b0-a694-4d3a-9bdc-2870addc3fd0
-md"# Mapping a line to a circle, and animating each algorithm."
+md"# Mapping a Line to a Circle, and Animating Each Algorithm"
 
 # ╔═╡ 7ce4ec4a-be1d-11ee-2110-f51bd6833309
 md"""
@@ -83,10 +83,10 @@ function line_to_circle_animation(line::Line; nframes = 300, kwargs...)
 	anim = Animation()
 	@progress for i in 1:nframes
 		t = i / nframes
-		fig = plot(line_xrange, line_yrange; kwargs...)
+		fig = plot(line_xrange, line_yrange; color = RGB(52/255,173/255,64/255), kwargs...)
 		set_plot_settings!(fig)
-		plot!(fig, cos.(θ), sin.(θ))
-		plot!(fig, line_xrange .+ vx .* vscale(t), line_yrange .+ vy .* vscale(t))
+		plot!(fig, cos.(θ), sin.(θ), color = RGB(255/255,77/255,77/255))
+		plot!(fig, line_xrange .+ vx .* vscale(t), line_yrange .+ vy .* vscale(t), color = RGB(254/255,248/255,48/255))
 		frame(anim, fig)
 	end
 
@@ -120,7 +120,7 @@ Let our sample line be of the form $y = \frac{\pi}{4}x + 3$. Let the circle the 
 L = Line(x -> π/4 * x + 3, (-3, 3))
 
 # ╔═╡ 087e9f2b-89e7-4c2d-9473-fe75d3c6b145
-md"""Now given any `Line` data type, we can return a function that takes in the x coordinate and gives back the point on the circle"""
+md"""Now given any `Line` data type, we can return a function that takes in the $x$ coordinate and gives back a point on the circle."""
 
 # ╔═╡ 5baced69-c885-4c40-89a7-a180db2a2789
 function line_to_circle_map_parametric(l::Line, x; r = 1)
@@ -129,13 +129,13 @@ function line_to_circle_map_parametric(l::Line, x; r = 1)
 end
 
 # ╔═╡ 338d23e8-5485-499f-a682-15d7deba9ef3
-md"And now to benchmark it on random points on the cirlce"
+md"And now, we benchmark it for random points projected onto the circle."
 
 # ╔═╡ 22dfcc8c-bb1a-4b42-9d48-f2d934422498
 @benchmark line_to_circle_map_parametric(L, x) setup=(x = rand(Uniform(L.x_range...)))
 
 # ╔═╡ e0d7a611-1840-4dc4-b3f2-5183d65bf78b
-md"After calculating $\theta$, we can also just calculate it's complex exponential to find the coordinates of our point"
+md"After calculating $\theta$, we can also calculate its complex exponential to find the coordinates of our projected point."
 
 # ╔═╡ bbcfccf1-b399-4986-bd62-8f9321b8b945
 function line_to_circle_map_parametric_complex(l::Line, x; r = 1)
@@ -163,7 +163,7 @@ end
 line_to_theta_atan2(L; r = 1) = x -> line_to_theta_atan2(L, x; r = r)
 
 # ╔═╡ 473d60d0-97b7-4f65-a989-268cde6ccc03
-md"And the same cane be done with complex numbers"
+md"The same cane be done with complex numbers."
 
 # ╔═╡ 1b56c44f-223c-40e5-8d3e-df1b02d5106d
 function line_to_theta_atan2_complex(l::Line, x; r = 1)
@@ -179,9 +179,6 @@ line_to_theta_atan2_complex(L; r = 1) = x -> line_to_theta_atan2_complex(L, x; r
 
 # ╔═╡ f532b487-0fc2-453d-835b-a32b14e59f75
 @benchmark line_to_theta_atan2_complex(L, x) setup=(x = rand(Uniform(L.x_range...)))
-
-# ╔═╡ 04dbf86c-cd43-4ee7-9b24-eb2048c5c426
-L(-2)
 
 # ╔═╡ 08a1c874-529c-4fa6-9c99-34a86014f2a8
 let
@@ -203,10 +200,10 @@ let
 	anim = Animation()
 	@progress for i in 1:nframes
 		t = i / nframes
-		fig = plot(line_xrange, line_yrange; xlim = (-4, 4), ylim = (-4, 4), aspect_ratio = :equal)
+		fig = plot(line_xrange, line_yrange; xlim = (-4, 4), ylim = (-4, 4), aspect_ratio = :equal, color = RGB(52/255,173/255,64/255))
 		set_plot_settings!(fig)
-		plot!(fig, cos.(θ), sin.(θ))
-		plot!(fig, line_xrange .+ vx .* vscale(t), line_yrange .+ vy .* vscale(t))
+		plot!(fig, cos.(θ), sin.(θ), color = RGB(255/255,77/255,77/255))
+		plot!(fig, line_xrange .+ vx .* vscale(t), line_yrange .+ vy .* vscale(t), color = RGB(254/255,248/255,48/255))
 		frame(anim, fig)
 	end
 
@@ -216,15 +213,15 @@ end
 # ╔═╡ d32ec77d-0e6a-42aa-9358-deb94ee25fac
 md"""## Animation Procedure
 
-The animation is made using the `Plots.jl` library. The main idea is to calculate each point's displacement $\vec d(t) = (x(t), y(t))$ where $t \in [0, 1]$ and for each frame $t_i$, displace each point on the line from it's initial position $\vec s(0) = (x, \pi x/4 + 3)$ by an amount $\vec d(t)$. To calcualte $\vec d$, we first use any of the above methods to find the coordinates of the point once they've been mapped onto the circle $\vec s(1)$ and compute the average velocity of any given point as $\vec v = \vec s(1) - \vec s(0)$. Then for a given frame, we can find the position of the moved line as follows.
+The animations are made using the `Plots.jl` library. The main idea is to calculate each point's displacement $\vec d(t) = (x(t), y(t))$ where $t \in [0, 1]$ and for each frame $t_i$, displace each point on the line from its initial position $\vec s(0) = (x, \frac{\pi}{4}x + 3)$ by an amount $\vec d(t)$. To calcualte $\vec d$, we first use any of the above methods to find the coordinates of the points once they've been mapped onto the circle $\vec s(1)$ and compute the average velocity of any given point as $\vec v = \vec s(1) - \vec s(0)$. Then, for a given frame, we can find the position of the displaced line as follows:
 
 $\vec s(t) = \vec s(0) + \vec v \cdot t_i$
 
-Here we can see that the displacement is $\vec d(t) = \vec v \cdot t$. Currently, the displacement varies linearly with time $t$, but we can make the animation smoother by having the rate of change of displacement be large near the start and small near the end. More specifically, we can make the derivative of the displacement follow a cosine curve, which will be $1$ at $t = 0$ and $0$ at $t = 1$, so specifically $\cos(\pi t/2)$. This can be accomplished by just setting the displacement to vary as the sine of the current time.
+Here, we can see that the displacement is $\vec d(t) = \vec v \cdot t$. Currently, the displacement varies linearly with time $t$, but we can make the animation smoother by having the rate of change of displacement be large near the start and small near the end. More specifically, we can make the derivative of the displacement follow a cosine curve $\cos(\frac{\pi}{2}t)$, which will be $1$ at $t = 0$ and $0$ at $t = 1$. This can be accomplished by setting the displacement to vary as the sine of the current time
 
-$\vec s(t_i) = \vec s(0) + \vec v \cdot \sin(\pi t_i/2)$
+$\vec s(t_i) = \vec s(0) + \vec v \cdot \sin(\frac{\pi}{2}t_i).$
 
-Finally, all of this can be done in a for-loop with either the `@gif` macro available or using the `Animation` type available in `Plots.jl`. Here's an example.
+Finally, all of this can be done in a for-loop with either the `@gif` macro available or using the `Animation` type available in `Plots.jl`. Here's an example:
 """
 
 # ╔═╡ ae25cd23-1d35-4284-b2a7-daabd5357f89
@@ -248,21 +245,23 @@ let
 	vy = (mapped_yrange .- line_yrange)
 	
 	anim = Animation()
+	scalefontsizes(1.2)
 	@progress for i in 1:nframes
 		t = i / nframes
-		fig1 = plot(line_xrange, line_yrange; xlim = (-4, 4), ylim = (-4, 4), aspect_ratio = :equal)
-		plot!(fig1, cos.(θ), sin.(θ))
-		plot!(fig1, line_xrange .+ vx .* vscale(t), line_yrange .+ vy .* vscale(t))
+		fig1 = plot(line_xrange, line_yrange; xlim = (-4, 4), ylim = (-4, 4), aspect_ratio = :equal, color = RGB(52/255,173/255,64/255))
+		plot!(fig1, cos.(θ), sin.(θ), color = RGB(255/255,77/255,77/255))
+		plot!(fig1, line_xrange .+ vx .* vscale(t), line_yrange .+ vy .* vscale(t), color = RGB(254/255,248/255,48/255))
 		set_plot_settings!(fig1)
 		
-		fig2 = plot(vscale, 0, 1, label = L"\sin(\pi t / 2)", legend = :top)
-		plot!(fig2, t -> 2/π * vscale_deriv(t), 0, 1, label = L"\cos(\pi t / 2)")
+		fig2 = plot(vscale, 0, 1, label = L"\sin(\frac{\pi}{2}t)", legend = :top, linecolor = RGB(66/255, 228/255, 254/255))
+		plot!(fig2, t -> 2/π * vscale_deriv(t), 0, 1, label = L"\cos(\frac{\pi}{2}t)")
 		vline!(fig2, [t], color = :white, linealpha = 0.5)
 		scatter!(fig2, [t, t], [vscale(t), 2/π * vscale_deriv(t)], color = :white)
 		set_plot_settings!(fig2)
 		frame(anim, plot(fig1, fig2, layout = (1, 2), size = (1000, 500)))
 	end
-
+	resetfontsizes()
+	
 	gif(anim, fps = 50)
 end
 
@@ -1524,12 +1523,11 @@ version = "1.4.1+1"
 # ╟─a971caf8-4f4a-4ecc-a14f-e7fd520aded1
 # ╠═6bbc966b-c769-4e67-b14d-f71130713633
 # ╠═c01cac25-2b2c-4e7b-bd4a-d5922a45ac08
-# ╟─473d60d0-97b7-4f65-a989-268cde6ccc03
+# ╠═473d60d0-97b7-4f65-a989-268cde6ccc03
 # ╠═1b56c44f-223c-40e5-8d3e-df1b02d5106d
 # ╠═d1ef4baf-2db1-466e-a566-387c1729b144
 # ╠═aa6c4fad-cdd2-4250-a98d-88a6430773ca
 # ╠═f532b487-0fc2-453d-835b-a32b14e59f75
-# ╠═04dbf86c-cd43-4ee7-9b24-eb2048c5c426
 # ╟─08a1c874-529c-4fa6-9c99-34a86014f2a8
 # ╟─d32ec77d-0e6a-42aa-9358-deb94ee25fac
 # ╠═ae25cd23-1d35-4284-b2a7-daabd5357f89
