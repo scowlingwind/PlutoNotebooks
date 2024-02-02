@@ -106,7 +106,7 @@ md""" ## Methods
 Two methods will be used to solve this problem: 
 
 1. The original line will be used as a parameter space for $\theta$. Mathematically, we take the interval of the $x$ coordinates of the line $[x_i, x_f]$, map it to $[0, 2\pi)$, and from there, get the $x$ and $y$ coordinates of the corresponding point on the circle $re^{iθ}$. So
-$[x_i, x_f] \mapsto [0, 2\pi) \mapsto (r\cos(\theta), r\sin(\theta)).$
+$[x_i, x_f] \mapsto [0, 2\pi] \mapsto (r\cos(\theta), r\sin(\theta)).$
 2. The other method treats each point on the line as a complex number $x + iy$ and calculates its argument $\phi = \arg(x + iy)$, to get the corresponding point $(r\cos(\phi), r\sin(\phi))$ on the circle.
 """
 
@@ -209,6 +209,9 @@ let
 
 	gif(anim, fps = 50)
 end
+
+# ╔═╡ f819abbf-b179-4839-8dbb-b7d888af2bee
+md"Note that while the first method is conceptually harder, it is computationally significantly cheaper and the separation of any two given points along the line will be proportional to their separation along the circle. The second method, on the other hand, is much easier to implement, however computationally more expensive."
 
 # ╔═╡ d32ec77d-0e6a-42aa-9358-deb94ee25fac
 md"""## Animation Procedure
@@ -1510,7 +1513,7 @@ version = "1.4.1+1"
 # ╠═a238b13d-57b2-41ae-b58c-628c06d50e84
 # ╟─a60f6a63-f035-47c8-9365-ea0357084402
 # ╟─ffba400b-94ab-41b7-9751-59dfa3cb6f4e
-# ╟─575b4cbb-1138-4b70-92b5-07bcf493ea7d
+# ╠═575b4cbb-1138-4b70-92b5-07bcf493ea7d
 # ╟─2eed67bf-9c4f-4348-a784-41b4dca70753
 # ╠═db19f613-e2a3-4c10-90d7-d53858214c7d
 # ╟─087e9f2b-89e7-4c2d-9473-fe75d3c6b145
@@ -1529,6 +1532,7 @@ version = "1.4.1+1"
 # ╠═aa6c4fad-cdd2-4250-a98d-88a6430773ca
 # ╠═f532b487-0fc2-453d-835b-a32b14e59f75
 # ╟─08a1c874-529c-4fa6-9c99-34a86014f2a8
+# ╟─f819abbf-b179-4839-8dbb-b7d888af2bee
 # ╟─d32ec77d-0e6a-42aa-9358-deb94ee25fac
 # ╠═ae25cd23-1d35-4284-b2a7-daabd5357f89
 # ╟─c72ab77a-a26a-442f-915c-912369a8d3e2
