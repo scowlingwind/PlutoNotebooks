@@ -105,7 +105,7 @@ md""" ## Methods
 
 Two methods will be used to solve this problem: 
 
-1. The original line will be used as a parameter space for $\theta$. Mathematically we take the interval of the $x$ coordinates of the line $[x_i, x_f]$, map it to $[0, 2\pi)$, and from there, get the $x$ and $y$ coordinates of the corresponding point on the circle $re^{iθ}$. So
+1. The original line will be used as a parameter space for $\theta$. Mathematically, we take the interval of the $x$ coordinates of the line $[x_i, x_f]$, map it to $[0, 2\pi)$, and from there, get the $x$ and $y$ coordinates of the corresponding point on the circle $re^{iθ}$. So
 $[x_i, x_f] \mapsto [0, 2\pi) \mapsto (r\cos(\theta), r\sin(\theta)).$
 2. The other method treats each point on the line as a complex number $x + iy$ and calculates its argument $\phi = \arg(x + iy)$, to get the corresponding point $(r\cos(\phi), r\sin(\phi))$ on the circle.
 """
